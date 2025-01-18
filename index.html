@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="stylee.css">
+  <title>Loan Calculator</title>
+</head>
+<body>
+  <img src="https://www.fincover.com/wp-content/uploads/2020/10/personal-loan3-300x263.png">
+  <div class="container">
+    <h2>Loan Calculator</h2>
+
+    <label for="loanAmount">Loan Amount:</label>
+    <input type="number" id="loanAmount" placeholder="Enter the loan amount" required>
+
+    <label for="interestRate">Monthly Interest Rate (%):</label>
+    <input type="number" id="interestRate" placeholder="Enter the interest rate" required>
+
+    <label for="startDate">Starting Date:</label>
+    <input type="date" id="startDate" required>
+
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" required>
+
+    <button onclick="calculateLoan()">Calculate</button>
+
+    <div id="result" class="result" style="display:none;">
+      <p><strong>Total Interest Paid: </strong><span id="totalInterest"></span></p>
+      <p><strong>Total Amount to be Paid: </strong><span id="totalAmount"></span></p>
+    </div>
+  </div>
+
+  <script>
+    function calculateLoan() {
+      // Get user inputs
+      const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+      const monthlyInterestRate = parseFloat(document.getElementById('interestRate').value) / 100;
+      const startDate = new Date(document.getElementById('startDate').value);
+      const endDate = new Date(document.getElementById('endDate').value);
+
+      // Validate inputs
+      if (isNaN(loanAmount) || isNaN(monthlyInterestRate) || isNaN(startDate) || isNaN(endDate)) {
+        alert("Please fill in all fields with valid data.");
+        return;
+      }
+
+      if (endDate <= startDate) {
+        alert("The end date must be later than the start date.");
+        return;
+      }
+
+      // Calculate the number of days between start date and end date
+      const timeDiff = endDate - startDate; // Difference in milliseconds
+      const days = timeDiff / (1000 * 3600 * 24); // Convert milliseconds to days
+
+      // Calculate the daily interest rate
+      const dailyInterestRate = monthlyInterestRate / 30; // Monthly rate divided by 30 to get daily rate
+
+      // Calculate total interest for the exact number of days
+      const totalInterest = loanAmount * dailyInterestRate * days;
+
+      // Calculate total amount to be paid (loan amount + interest)
+      const totalAmount = loanAmount + totalInterest;
+
+      // Display the result
+      document.getElementById('totalInterest').innerText = totalInterest.toFixed(2);
+      document.getElementById('totalAmount').innerText = totalAmount.toFixed(2);
+      document.getElementById('result').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
